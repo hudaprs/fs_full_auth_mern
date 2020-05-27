@@ -26,3 +26,4 @@ client/yarn-error.log*
 
 # Server dependencies
 node_modules/
+config/default.json
