@@ -8,6 +8,6 @@ connectDB();
 
 app.use(express.json({ extended: false }));
 
-app.use("/api/v1/users", require("./routes/auth"));
+app.use("/api/auth", require("./routes/auth"));
 
 app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
