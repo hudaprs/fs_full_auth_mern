@@ -12,7 +12,8 @@ const Register = ({
   registerUser,
   removeIsSuccess,
   clearErrors,
-  auth: { loading, errors, message, isSuccess }
+  auth: { loading, errors, message, isSuccess, isAuthenticated },
+  history
 }) => {
   const [user, setUser] = useState({
     name: "",
@@ -43,6 +44,8 @@ const Register = ({
   };
 
   useEffect(() => {
+    if (isAuthenticated) history.push("/");
+
     if (isSuccess) {
       setAlert(message, "success");
       setUser({
@@ -59,7 +62,7 @@ const Register = ({
       clearErrors();
     }
     // eslint-disable-next-line
-  }, [isSuccess, errors, setAlert]);
+  }, [isSuccess, errors, setAlert, history, isAuthenticated]);
 
   return (
     <div className="form-container">

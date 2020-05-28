@@ -1,21 +1,86 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { setAlert, removeAlert } from "../../actions/alertActions";
+import { login, removeIsSuccess, clearErrors } from "../../actions/authActions";
 
-const Login = () => {
+const Login = ({
+  setAlert,
+  removeAlert,
+  login,
+  auth: { loading, isSuccess, message, errors, isAuthenticated },
+  history
+}) => {
+  const [user, setUser] = useState({
+    email: "",
+    password: ""
+  });
+
+  const { email, password } = user;
+  const { push } = history;
+
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (email === "" || password === "") {
+      setAlert("Please fill all forms", "danger");
+    } else {
+      login(user);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) push("/");
+
+    if (isSuccess) {
+      push("/");
+      removeIsSuccess();
+      clearErrors();
+      removeAlert();
+    }
+
+    if (errors) {
+      if (
+        errors.message === "Email not found" ||
+        errors.message === "Your account is not active" ||
+        errors.message === "Password invalid"
+      ) {
+        setAlert(message, "danger");
+      }
+    }
+
+    // eslint-disable-next-line
+  }, [isSuccess, errors, setAlert, history, isAuthenticated]);
+
   return (
     <div className="form-container">
       <h1 className="text-primary">Login</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={email}
+            onChange={onChange}
+          />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={onChange}
+          />
         </div>
         <div className="form-group">
           <button type="submit" className="btn btn-block">
-            Login
+            {loading && <i className="fas fa-circle-notch fa-spin"></i>} Login
           </button>
         </div>
       </form>
@@ -23,4 +88,23 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  setAlert: PropTypes.func.isRequired,
+  removeAlert: PropTypes.func.isRequired,
+  removeIsSuccess: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, {
+  setAlert,
+  removeAlert,
+  login,
+  removeIsSuccess,
+  clearErrors
+})(Login);

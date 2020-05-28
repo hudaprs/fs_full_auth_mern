@@ -4,11 +4,15 @@ import {
   SET_LOADING,
   REMOVE_ISSUCCESS,
   CLEAR_ERRORS,
-  VERIFY_USER
+  VERIFY_USER,
+  LOAD_USER,
+  LOGIN_USER
 } from "../actions/types";
 
 const initialState = {
+  token: localStorage.getItem("token"),
   user: null,
+  isAuthenticated: false,
   loading: false,
   isSuccess: false,
   errors: null,
@@ -38,9 +42,32 @@ export default (state = initialState, { type, payload }) => {
         errors: null,
         message: payload.message
       };
-    case AUTH_ERROR:
+    case LOGIN_USER:
+      localStorage.setItem("token", payload.results.token);
       return {
         ...state,
+        token: localStorage.getItem("token"),
+        isAuthenticated: true,
+        loading: false,
+        isSuccess: true,
+        errors: null,
+        message: payload.message
+      };
+    case LOAD_USER:
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: true,
+        user: payload,
+        errors: null,
+        message: payload.message
+      };
+    case AUTH_ERROR:
+      localStorage.clear();
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
         loading: false,
         isSuccess: false,
         errors: payload,

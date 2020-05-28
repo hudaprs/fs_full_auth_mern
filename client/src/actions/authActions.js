@@ -4,9 +4,12 @@ import {
   AUTH_ERROR,
   REMOVE_ISSUCCESS,
   CLEAR_ERRORS,
-  VERIFY_USER
+  VERIFY_USER,
+  LOAD_USER,
+  LOGIN_USER
 } from "./types";
 import axios from "axios";
+import setAuthToken from "../utils/setAuthToken";
 
 export const setLoading = () => {
   return {
@@ -24,6 +27,32 @@ export const clearErrors = () => {
   return {
     type: CLEAR_ERRORS
   };
+};
+
+export const loadUser = () => async (dispatch) => {
+  setAuthToken(localStorage.token);
+  dispatch(setLoading());
+
+  try {
+    const load = await axios.get("/auth");
+
+    dispatch({ type: LOAD_USER, payload: load.data.results.user });
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR, payload: err.response.data });
+  }
+};
+
+export const login = (userData) => async (dispatch) => {
+  dispatch(setLoading());
+
+  try {
+    const logging = await axios.post("/auth/login", userData);
+
+    dispatch({ type: LOGIN_USER, payload: logging.data });
+    dispatch(loadUser());
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR, payload: err.response.data });
+  }
 };
 
 export const registerUser = (userData) => async (dispatch) => {
