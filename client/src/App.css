@@ -10,8 +10,21 @@ body {
   background-color: #f4f4f4;
 }
 
+h3 {
+  margin: 10px 0;
+}
+
+/* Text */
 .text-primary {
   color: #3498db;
+}
+
+.text-success {
+  color: #27ae60;
+}
+
+.text-danger {
+  color: #e74c3c;
 }
 
 /* Navbar */
@@ -115,6 +128,13 @@ body {
   color: #fff;
 }
 
+/* Verification Animation */
+.verification-animation i {
+  animation: user-verification 2s infinite ease-in-out;
+  transform: scale(0.5);
+  transition: all 2s ease-in-out;
+}
+
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -124,5 +144,11 @@ body {
   .navbar a {
     padding: 10 10px;
     margin: 0 3px;
+  }
+}
+
+@keyframes user-verification {
+  to {
+    transform: scale(1);
   }
 }

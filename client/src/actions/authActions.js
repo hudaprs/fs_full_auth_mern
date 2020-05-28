@@ -3,7 +3,8 @@ import {
   REGISTER_USER,
   AUTH_ERROR,
   REMOVE_ISSUCCESS,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  VERIFY_USER
 } from "./types";
 import axios from "axios";
 
@@ -32,7 +33,17 @@ export const registerUser = (userData) => async (dispatch) => {
 
     dispatch({ type: REGISTER_USER, payload: register.data });
   } catch (err) {
-    console.error(err.message);
+    dispatch({ type: AUTH_ERROR, payload: err.response.data });
+  }
+};
+
+export const verifyUser = (token) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const verify = await axios.get(`/auth/verify?token=${token}`);
+
+    dispatch({ type: VERIFY_USER, payload: verify.data });
+  } catch (err) {
     dispatch({ type: AUTH_ERROR, payload: err.response.data });
   }
 };

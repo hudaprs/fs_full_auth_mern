@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/layouts/Navbar";
 import Alert from "./components/alert/Alert";
 import Home from "./components/pages/Home";
+import NotFound from "./components/pages/NotFound";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Verify from "./components/auth/Verify";
 import "./App.css";
 
 import { Provider } from "react-redux";
@@ -22,6 +24,8 @@ const App = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/verify" component={Verify} />
+              <Route exact component={NotFound} />
             </Switch>
           </div>
         </Fragment>

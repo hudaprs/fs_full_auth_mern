@@ -51,7 +51,7 @@ exports.register = async (req, res) => {
     sendEmail(
       user.email,
       "Account verification",
-      `Your token for activating your account: <b>${verificated.token}</b>`
+      `Visit this link for activating your account: <a href="http://localhost:3000/verify?token=${verificated.token}" target="_blank">Click me</a>`
     );
 
     const newUser = await user.save();

@@ -3,7 +3,8 @@ import {
   AUTH_ERROR,
   SET_LOADING,
   REMOVE_ISSUCCESS,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  VERIFY_USER
 } from "../actions/types";
 
 const initialState = {
@@ -22,6 +23,14 @@ export default (state = initialState, { type, payload }) => {
         loading: true
       };
     case REGISTER_USER:
+      return {
+        ...state,
+        loading: false,
+        isSuccess: true,
+        errors: null,
+        message: payload.message
+      };
+    case VERIFY_USER:
       return {
         ...state,
         loading: false,
