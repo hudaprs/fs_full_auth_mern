@@ -89,20 +89,20 @@ exports.verify = async (req, res) => {
     if (!token)
       return res.status(404).json(error("Token not found", res.statusCode));
 
-    let verification = await Verification.findOne({ token });
-
     // Check verification data
+    let verification = await Verification.findOne({
+      token,
+      type: "userVerification"
+    });
     if (!verification)
       return res.status(400).json(error("Token invalid", res.statusCode));
 
-    // Update User
-    let user = await User.findOne({ _id: verification.userId });
-
     // Check user
+    let user = await User.findOne({ _id: verification.userId });
     if (!user)
       return res.status(404).json(error("User not found", res.statusCode));
 
-    // Activate User
+    // Activate / Update User
     await User.findByIdAndUpdate(user._id, {
       $set: {
         isVerified: true,
@@ -253,6 +253,77 @@ exports.forgotPassword = async (req, res) => {
           res.statusCode
         )
       );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json(error("Server error", res.statusCode));
+  }
+};
+
+/**
+ * @desc    Change Password
+ * @method  POST api/auth/change-password
+ * @access  Private
+ */
+exports.changePassword = async (req, res) => {
+  const { token } = req.query;
+  const { password, passwordConfirmation } = req.body;
+
+  try {
+    // Errors Validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+
+    // Check the token
+    if (!token)
+      return res.status(404).json(error("Token not found", res.statusCode));
+
+    // Check the password input
+    if (password !== passwordConfirmation)
+      return res
+        .status(422)
+        .json(error("Password confirmation did not match", res.statusCode));
+
+    // Check the token that user haved
+    let verification = await Verification.findOne({
+      token,
+      type: "forgotPassword"
+    });
+    if (!verification)
+      return res.status(404).json(error("Token invalid", res.statusCode));
+
+    // Check user
+    let user = await User.findById(verification.userId);
+    if (!user)
+      return res.status(404).json(error("User not found", res.statusCode));
+
+    // Hash Password
+    const salt = await bcrypt.genSalt(10);
+    const newPassword = await bcrypt.hash(password, salt);
+
+    // Update user password
+    user = await User.findByIdAndUpdate(user._id, {
+      $set: {
+        password: newPassword
+      }
+    });
+
+    // Save user
+    await user.save();
+
+    // Send email
+    sendEmail(
+      user.email,
+      "Forgot Password",
+      `Hello ${user.name}, your password has been successfully changed.`
+    );
+
+    // Remove forgot password token
+    await Verification.findByIdAndRemove(verification._id);
+
+    res
+      .status(200)
+      .json(success("Your password has been changed", null, res.statusCode));
   } catch (err) {
     console.error(err.message);
     res.status(500).json(error("Server error", res.statusCode));

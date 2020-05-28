@@ -20,6 +20,10 @@ exports.forgotPasswordValidation = [
   check("email", "Email is required").exists()
 ];
 
+exports.changePasswordValidation = [
+  check("password", "Password minimal is 6 length").isLength({ min: 6 })
+];
+
 exports.auth = (req, res, next) => {
   const token = req.header("x-auth-token");
 
