@@ -7,6 +7,7 @@ import NotFound from "./components/pages/NotFound";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Verify from "./components/auth/Verify";
+import PrivateRoute from "./components/routes/PrivateRoute";
 import "./App.css";
 
 import { Provider } from "react-redux";
@@ -21,7 +22,7 @@ const App = () => {
           <div className="container">
             <Alert />
             <Switch>
-              <Route exact path="/" component={Home} />
+              <PrivateRoute exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/verify" component={Verify} />

@@ -1,26 +1,20 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import queryString from "query-string";
-import {
-  verifyUser,
-  removeIsSuccess,
-  clearErrors
-} from "../../actions/authActions";
+import { verifyUser } from "../../actions/authActions";
 
-const Verify = ({
-  location: { search },
-  auth,
-  verifyUser,
-  removeIsSuccess,
-  clearErrors
-}) => {
+const Verify = ({ location: { search }, auth, verifyUser, history }) => {
   const { token } = queryString.parse(search);
   const { loading, message, isSuccess, errors } = auth;
 
   useEffect(() => {
-    verifyUser(token);
+    if (!localStorage.token) {
+      verifyUser(token);
+    } else {
+      history.push("/");
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [history]);
 
   return (
     <div>
@@ -71,7 +65,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  verifyUser,
-  removeIsSuccess,
-  clearErrors
+  verifyUser
 })(Verify);

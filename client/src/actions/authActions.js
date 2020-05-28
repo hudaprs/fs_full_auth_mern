@@ -6,7 +6,8 @@ import {
   CLEAR_ERRORS,
   VERIFY_USER,
   LOAD_USER,
-  LOGIN_USER
+  LOGIN_USER,
+  LOGOUT
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -75,4 +76,10 @@ export const verifyUser = (token) => async (dispatch) => {
   } catch (err) {
     dispatch({ type: AUTH_ERROR, payload: err.response.data });
   }
+};
+
+export const logout = () => {
+  return {
+    type: LOGOUT
+  };
 };

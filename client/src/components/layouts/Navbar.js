@@ -2,9 +2,13 @@ import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { loadUser } from "../../actions/authActions";
+import { loadUser, logout } from "../../actions/authActions";
 
-const Navbar = ({ loadUser, isAuthenticated, user, loading }) => {
+const Navbar = ({ loadUser, logout, isAuthenticated, user, loading }) => {
+  const onLogout = () => {
+    logout();
+  };
+
   // Load user automatically
   useEffect(() => {
     loadUser();
@@ -17,7 +21,7 @@ const Navbar = ({ loadUser, isAuthenticated, user, loading }) => {
         <a href="#!">Hello {user && user.name}</a>
       </li>
       <li>
-        <a href="#!">
+        <a href="#!" onClick={onLogout}>
           <em className="fas fa-sign-out"></em> Logout
         </a>
       </li>
@@ -53,8 +57,10 @@ const Navbar = ({ loadUser, isAuthenticated, user, loading }) => {
 Navbar.propTypes = {
   loadUser: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired,
   user: PropTypes.object,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  history: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({
@@ -63,4 +69,4 @@ const mapStateToProps = (state) => ({
   loading: state.auth.loading
 });
 
-export default connect(mapStateToProps, { loadUser })(Navbar);
+export default connect(mapStateToProps, { loadUser, logout })(Navbar);

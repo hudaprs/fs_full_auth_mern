@@ -6,7 +6,8 @@ import {
   CLEAR_ERRORS,
   VERIFY_USER,
   LOAD_USER,
-  LOGIN_USER
+  LOGIN_USER,
+  LOGOUT
 } from "../actions/types";
 
 const initialState = {
@@ -82,6 +83,17 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         errors: null
+      };
+    case LOGOUT:
+      localStorage.clear();
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+        errors: null,
+        message: ""
       };
     default:
       return state;

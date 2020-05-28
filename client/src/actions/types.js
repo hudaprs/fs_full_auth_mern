@@ -8,3 +8,4 @@ export const LOAD_USER = "LOAD_USER";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const REMOVE_ISSUCCESS = "REMOVE_ISSUCCESS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const LOGOUT = "LOGOUT";
