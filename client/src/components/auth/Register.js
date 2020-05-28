@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alertActions";
 import {
@@ -58,8 +59,10 @@ const Register = ({
     }
 
     if (errors) {
-      setAlert(message, "danger");
-      clearErrors();
+      if (errors.message === "Email already registered") {
+        setAlert(message, "danger");
+        clearErrors();
+      }
     }
     // eslint-disable-next-line
   }, [isSuccess, errors, setAlert, history, isAuthenticated]);
@@ -117,6 +120,15 @@ const Register = ({
       </form>
     </div>
   );
+};
+
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired,
+  removeIsSuccess: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
+  history: PropTypes.object,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({

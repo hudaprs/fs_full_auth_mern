@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAlert, removeAlert } from "../../actions/alertActions";
 import { login, removeIsSuccess, clearErrors } from "../../actions/authActions";
@@ -82,6 +83,9 @@ const Login = ({
           <button type="submit" className="btn btn-block">
             {loading && <i className="fas fa-circle-notch fa-spin"></i>} Login
           </button>
+          <Link to="/forgot-password" className="btn btn-danger btn-block">
+            Forgot Password
+          </Link>
         </div>
       </form>
     </div>

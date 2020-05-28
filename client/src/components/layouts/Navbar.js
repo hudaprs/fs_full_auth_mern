@@ -59,8 +59,7 @@ Navbar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
   user: PropTypes.object,
-  loading: PropTypes.bool,
-  history: PropTypes.object
+  loading: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({

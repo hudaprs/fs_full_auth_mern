@@ -1,4 +1,5 @@
 import React, { useEffect, Fragment } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import queryString from "query-string";
 import { verifyUser } from "../../actions/authActions";
@@ -58,6 +59,13 @@ const Verify = ({ location: { search }, auth, verifyUser, history }) => {
       </div>
     </div>
   );
+};
+
+Verify.propTypes = {
+  location: PropTypes.object,
+  auth: PropTypes.object.isRequired,
+  verifyUser: PropTypes.func.isRequired,
+  history: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({

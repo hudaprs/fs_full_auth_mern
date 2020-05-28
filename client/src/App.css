@@ -94,11 +94,28 @@ h3 {
   background-color: #3498db;
   color: #fff;
   border: none;
-  padding: 15px 20px;
+  padding: 10px 20px;
   font-size: 16px;
   text-align: center;
   cursor: pointer;
+  margin: 10px 0;
   transition: 0.5s;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  color: #fff;
 }
 
 .btn-block {
