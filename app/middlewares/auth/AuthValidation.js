@@ -16,11 +16,15 @@ exports.loginValidation = [
   check("password", "Password is required").not().isEmpty()
 ];
 
+exports.forgotPasswordValidation = [
+  check("email", "Email is required").exists()
+];
+
 exports.auth = (req, res, next) => {
   const token = req.header("x-auth-token");
 
   if (!token)
-    return res.status(404).json(error("Token not found", res.statusCode));
+    return res.status(401).json(error("Token not found", res.statusCode));
 
   try {
     const decoded = jwt.verify(token, config.get("jwtSecret"));
@@ -30,7 +34,6 @@ exports.auth = (req, res, next) => {
     req.user = decoded.user;
     next();
   } catch (err) {
-    console.error(err.message);
-    res.status(401).json(error("Unauthorized", res.statusCode));
+    res.status(401).json(error(err.message, res.statusCode));
   }
 };

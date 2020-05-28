@@ -9,6 +9,10 @@ const verificationSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    default: "userVerification"
+  },
   date: {
     type: Date,
     default: Date.now

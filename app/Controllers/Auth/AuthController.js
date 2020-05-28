@@ -51,7 +51,7 @@ exports.register = async (req, res) => {
     sendEmail(
       user.email,
       "Account verification",
-      `Visit this link for activating your account: <a href="http://localhost:3000/verify?token=${verificated.token}" target="_blank">Click me</a>`
+      `Visit this link for activating your account: <a href="http://localhost:3000/verify?token=${verificated.token}" target="_blank">Click Here</a>`
     );
 
     const newUser = await user.save();
@@ -117,7 +117,7 @@ exports.verify = async (req, res) => {
     sendEmail(
       user.email,
       "Account verification",
-      `Hallo ${user.email} Your account successfully activated, enjoy!`
+      `Hello ${user.email} Your account successfully activated, enjoy!`
     );
 
     res
@@ -168,6 +168,7 @@ exports.login = async (req, res) => {
       }
     };
 
+    // Sign token
     jwt.sign(
       payload,
       config.get("jwtSecret"),
@@ -194,6 +195,64 @@ exports.login = async (req, res) => {
         );
       }
     );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json(error("Server error", res.statusCode));
+  }
+};
+
+/**
+ * @desc    Forgot Password
+ * @method  POST api/auth/forgot-password
+ * @access  Public
+ */
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Errors Validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json({ errors: errors.array() });
+
+    let user = await User.findOne({ email }).select("-password");
+
+    // Check User
+    if (!user)
+      return res.status(404).json(error("Email not found", res.statusCode));
+
+    // Delete if there's the same token from the same user for forgotting password
+    let findVerification = await Verification.findOne({
+      userId: user._id,
+      type: "forgotPassword"
+    });
+    if (findVerification)
+      await Verification.findByIdAndRemove(findVerification._id);
+
+    // Save verification forgot password token
+    let verification = await new Verification({
+      userId: user._id,
+      token: randomString(30),
+      type: "forgotPassword"
+    });
+    let verificated = await verification.save();
+
+    // Send email
+    sendEmail(
+      user.email,
+      "Forgot Password",
+      `Visit this link for changing your account password: <a href="http://localhost:3000/forgot-password?token=${verificated.token}" target="_blank">Click Here</a>`
+    );
+
+    res
+      .status(200)
+      .json(
+        success(
+          "Forgot password link has been sent to your email",
+          null,
+          res.statusCode
+        )
+      );
   } catch (err) {
     console.error(err.message);
     res.status(500).json(error("Server error", res.statusCode));
