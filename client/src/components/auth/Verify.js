@@ -14,8 +14,7 @@ const Verify = ({ location: { search }, auth, verifyUser, history }) => {
     } else {
       history.push("/");
     }
-    // eslint-disable-next-line
-  }, [history]);
+  }, [history, verifyUser, token]);
 
   return (
     <div>

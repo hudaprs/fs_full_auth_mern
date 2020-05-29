@@ -7,7 +7,8 @@ import {
   VERIFY_USER,
   LOAD_USER,
   LOGIN_USER,
-  LOGOUT
+  LOGOUT,
+  FORGOT_PASSWORD
 } from "../actions/types";
 
 const initialState = {
@@ -74,16 +75,6 @@ export default (state = initialState, { type, payload }) => {
         errors: payload,
         message: payload.message
       };
-    case REMOVE_ISSUCCESS:
-      return {
-        ...state,
-        isSuccess: false
-      };
-    case CLEAR_ERRORS:
-      return {
-        ...state,
-        errors: null
-      };
     case LOGOUT:
       localStorage.clear();
       return {
@@ -94,6 +85,23 @@ export default (state = initialState, { type, payload }) => {
         loading: false,
         errors: null,
         message: ""
+      };
+    case FORGOT_PASSWORD:
+      return {
+        ...state,
+        message: payload.message,
+        loading: false,
+        isSuccess: true
+      };
+    case REMOVE_ISSUCCESS:
+      return {
+        ...state,
+        isSuccess: false
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        errors: null
       };
     default:
       return state;

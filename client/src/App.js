@@ -7,6 +7,7 @@ import NotFound from "./components/pages/NotFound";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Verify from "./components/auth/Verify";
+import ForgotPassword from "./components/auth/ForgotPassword";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import "./App.css";
 
@@ -26,6 +27,7 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/verify" component={Verify} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact component={NotFound} />
             </Switch>
           </div>

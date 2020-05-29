@@ -10,7 +10,8 @@ const Login = ({
   removeAlert,
   login,
   auth: { loading, isSuccess, message, errors, isAuthenticated },
-  history
+  history,
+  removeIsSuccess
 }) => {
   const [user, setUser] = useState({
     email: "",
@@ -33,11 +34,10 @@ const Login = ({
   };
 
   useEffect(() => {
+    removeIsSuccess();
     if (isAuthenticated) push("/");
 
     if (isSuccess) {
-      push("/");
-      removeIsSuccess();
       clearErrors();
       removeAlert();
     }
@@ -51,9 +51,15 @@ const Login = ({
         setAlert(message, "danger");
       }
     }
-
-    // eslint-disable-next-line
-  }, [isSuccess, errors, setAlert, history, isAuthenticated]);
+  }, [
+    isSuccess,
+    errors,
+    isAuthenticated,
+    message,
+    push,
+    removeAlert,
+    setAlert
+  ]);
 
   return (
     <div className="form-container">
@@ -65,7 +71,7 @@ const Login = ({
             type="email"
             name="email"
             id="email"
-            value={email}
+            value={email.toLowerCase()}
             onChange={onChange}
           />
         </div>

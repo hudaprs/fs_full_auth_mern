@@ -7,29 +7,34 @@ import {
   VERIFY_USER,
   LOAD_USER,
   LOGIN_USER,
-  LOGOUT
+  LOGOUT,
+  FORGOT_PASSWORD
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 
+// Set loading
 export const setLoading = () => {
   return {
     type: SET_LOADING
   };
 };
 
+// Set isSuccess to false
 export const removeIsSuccess = () => {
   return {
     type: REMOVE_ISSUCCESS
   };
 };
 
+// Clear Errors
 export const clearErrors = () => {
   return {
     type: CLEAR_ERRORS
   };
 };
 
+// Load authenticated user
 export const loadUser = () => async (dispatch) => {
   setAuthToken(localStorage.token);
   dispatch(setLoading());
@@ -43,6 +48,7 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
+// Logged in user
 export const login = (userData) => async (dispatch) => {
   dispatch(setLoading());
 
@@ -56,6 +62,7 @@ export const login = (userData) => async (dispatch) => {
   }
 };
 
+// Register user
 export const registerUser = (userData) => async (dispatch) => {
   dispatch(setLoading());
   try {
@@ -67,6 +74,7 @@ export const registerUser = (userData) => async (dispatch) => {
   }
 };
 
+// Verify user
 export const verifyUser = (token) => async (dispatch) => {
   dispatch(setLoading());
   try {
@@ -78,8 +86,21 @@ export const verifyUser = (token) => async (dispatch) => {
   }
 };
 
+// Logout user
 export const logout = () => {
   return {
     type: LOGOUT
   };
+};
+
+// Forgot password
+export const forgotPassword = (email) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const forgot = await axios.post("/auth/forgot-password", email);
+
+    dispatch({ type: FORGOT_PASSWORD, payload: forgot.data });
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR, payload: err.response.data });
+  }
 };

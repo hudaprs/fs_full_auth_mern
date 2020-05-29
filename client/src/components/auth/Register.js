@@ -45,6 +45,7 @@ const Register = ({
   };
 
   useEffect(() => {
+    removeIsSuccess();
     if (isAuthenticated) history.push("/");
 
     if (isSuccess) {
@@ -55,7 +56,6 @@ const Register = ({
         password: "",
         passwordConfirmation: ""
       });
-      removeIsSuccess();
     }
 
     if (errors) {
@@ -64,8 +64,16 @@ const Register = ({
         clearErrors();
       }
     }
-    // eslint-disable-next-line
-  }, [isSuccess, errors, setAlert, history, isAuthenticated]);
+  }, [
+    isSuccess,
+    errors,
+    isAuthenticated,
+    clearErrors,
+    history,
+    message,
+    removeIsSuccess,
+    setAlert
+  ]);
 
   return (
     <div className="form-container">
@@ -87,7 +95,7 @@ const Register = ({
             type="email"
             name="email"
             id="email"
-            value={email}
+            value={email.toLowerCase()}
             onChange={onChange}
           />
         </div>
