@@ -8,7 +8,8 @@ import {
   LOAD_USER,
   LOGIN_USER,
   LOGOUT,
-  FORGOT_PASSWORD
+  FORGOT_PASSWORD,
+  CHANGE_PASSWORD
 } from "./types";
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -100,6 +101,21 @@ export const forgotPassword = (email) => async (dispatch) => {
     const forgot = await axios.post("/auth/forgot-password", email);
 
     dispatch({ type: FORGOT_PASSWORD, payload: forgot.data });
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR, payload: err.response.data });
+  }
+};
+
+// Change password
+export const changePassword = (passwordData, token) => async (dispatch) => {
+  dispatch(setLoading());
+  try {
+    const change = await axios.post(
+      `/auth/change-password?token=${token}`,
+      passwordData
+    );
+
+    dispatch({ type: CHANGE_PASSWORD, payload: change.data });
   } catch (err) {
     dispatch({ type: AUTH_ERROR, payload: err.response.data });
   }

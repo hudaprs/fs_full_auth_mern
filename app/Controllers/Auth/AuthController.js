@@ -241,7 +241,7 @@ exports.forgotPassword = async (req, res) => {
     sendEmail(
       user.email,
       "Forgot Password",
-      `Visit this link for changing your account password: <a href="http://localhost:3000/forgot-password?token=${verificated.token}" target="_blank">Click Here</a>`
+      `Visit this link for changing your account password: <a href="http://localhost:3000/change-password?token=${verificated.token}&type=forgotPassword" target="_blank">Click Here</a>`
     );
 
     res

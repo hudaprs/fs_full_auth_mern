@@ -58,7 +58,8 @@ const Login = ({
     message,
     push,
     removeAlert,
-    setAlert
+    setAlert,
+    removeIsSuccess
   ]);
 
   return (

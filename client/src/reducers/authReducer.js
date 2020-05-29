@@ -8,7 +8,8 @@ import {
   LOAD_USER,
   LOGIN_USER,
   LOGOUT,
-  FORGOT_PASSWORD
+  FORGOT_PASSWORD,
+  CHANGE_PASSWORD
 } from "../actions/types";
 
 const initialState = {
@@ -87,6 +88,13 @@ export default (state = initialState, { type, payload }) => {
         message: ""
       };
     case FORGOT_PASSWORD:
+      return {
+        ...state,
+        message: payload.message,
+        loading: false,
+        isSuccess: true
+      };
+    case CHANGE_PASSWORD:
       return {
         ...state,
         message: payload.message,
